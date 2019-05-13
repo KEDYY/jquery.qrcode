@@ -48,6 +48,17 @@ for (function (a) {
             }, b), c = function () {
                 var c, d, e, f, g, h, i, j, k, a = new QRCode(b.typeNumber, b.correctLevel);
                 for (a.addData(b.text), a.make(), c = document.createElement("canvas"), c.width = b.width, c.height = b.height, d = c.getContext("2d"), b.src && (e = new Image(), e.src = b.src, e.onload = function () {
+                        var imageData = d.getImageData((b.width - b.imgWidth) / 2, (b.height - b.imgHeight) / 2, b.imgWidth, b.imgHeight);
+                        function hex2rgb(h){
+                            return [parseInt("0x" + h.slice(1, 3)), parseInt("0x" + h.slice(3, 5)), parseInt("0x" + h.slice(5, 7))];
+                        }
+                        for(var i = 0; i < imageData.data.length; i += 4) {
+                            imageData.data[i] = hex2rgb(b.background)[0];
+                            imageData.data[i + 1] = hex2rgb(b.background)[1];
+                            imageData.data[i + 2] = hex2rgb(b.background)[2];
+                            imageData.data[i + 3] = 255;
+                        }
+                        d.putImageData(imageData, (b.width - b.imgWidth) / 2, (b.height - b.imgHeight) / 2);
                         d.drawImage(e, (b.width - b.imgWidth) / 2, (b.height - b.imgHeight) / 2, b.imgWidth, b.imgHeight)
                     }), f = b.width / a.getModuleCount(), g = b.height / a.getModuleCount(), h = 0; h < a.getModuleCount(); h++) {
                     for (i = 0; i < a.getModuleCount(); i++) {
